@@ -1,0 +1,121 @@
+<project name="chswf" default="all" basedir=".">
+
+<description>
+chswf build file
+</description>
+
+<!-- Properties -->
+<property name="src.java" location="src/java"/>
+<property name="test.java" location="test/java"/>
+<property name="test.data" location="test/data"/>
+
+<property name="build.root" location="build"/>
+<property name="build.classes" location="${build.root}/classes"/>
+<property name="build.package" location="${build.root}/package"/>
+
+<property name="build.test.classes" location="${build.root}/test/classes"/>
+<property name="build.test.output" location="${build.root}/test/output"/>
+<property name="build.test.reports" location="${build.root}/test/reports"/>
+
+<!-- Global targets -->
+
+<target name="all" depends="unit_tests,package"/>
+
+<!--
+
+Initialisation
+
+-->
+
+<!-- Init -->
+<target name="init">
+
+  <property name="build.version" value="1.0"/>
+
+  <tstamp>
+    <format property="build.time" pattern="yyyy/MM/dd hh:mm"/>
+  </tstamp>
+
+</target>
+
+<!-- Clean -->
+<target name="clean"
+        description="Remove build files">
+  <delete dir="${build.root}"/>
+</target>
+
+<!-- Classpath -->
+<path id="test.classpath">
+    <pathelement location="${build.test.classes}" />
+    <pathelement location="${build.classes}" />
+</path>
+
+<!-- Compile -->
+<target name="compile" depends="init">
+
+  <mkdir dir="${build.classes}"/>
+
+  <javac srcdir="${src.java}"
+    destdir="${build.classes}"
+    debug="on"
+    source="1.5"
+    target="1.5"
+    includeantruntime="false">
+  </javac>
+
+</target>
+
+<!-- Compile tests -->
+<target name="compile-tests" depends="compile">
+
+    <mkdir dir="${build.test.classes}"/>
+
+    <javac srcdir="${test.java}"
+           destdir="${build.test.classes}"
+           debug="on"
+           source="1.5"
+           target="1.5"
+           includeantruntime="true">
+        <classpath refid="test.classpath"/>
+    </javac>
+
+</target>
+
+<!-- Run tests -->
+<target name="unit_tests" depends="compile-tests">
+
+  <mkdir dir="${build.test.output}"/>
+  <mkdir dir="${build.test.reports}"/>
+
+  <junit printsummary="yes" haltonfailure="yes">
+    <sysproperty key="test.data" value="${test.data}"/>
+    <sysproperty key="test.output" value="${build.test.output}"/>
+    <formatter type="plain" />
+    <classpath refid="test.classpath"/>
+    <batchtest fork="yes" todir="${build.test.reports}">
+      <fileset dir="${test.java}">
+        <include name="**/Test*" />
+      </fileset>
+    </batchtest>
+  </junit>
+
+</target>
+
+<!-- Package -->
+<target name="package" depends="compile">
+
+  <mkdir dir="${build.package}"/>
+
+  <jar destfile="${build.package}/chswf-${build.version}.jar">
+    <manifest>
+      <attribute name="Main-Class" value="swf.ChangeSwf"/>
+      <attribute name="Implementation-Title" value="chswf"/>
+      <attribute name="Implementation-Version" value="${build.version}"/>
+      <attribute name="Build-Time" value="${build.time}"/>
+    </manifest>
+    <fileset dir="${build.classes}"/>
+  </jar>
+
+</target>
+
+</project>
