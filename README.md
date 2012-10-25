@@ -1,7 +1,7 @@
 chswf - simple swf modification
 ===============================
 
-chswf if a java tool for making changes to a [swf file]. 
+chswf if a java tool for making changes to a [swf file]
 
 it only has one use at the moment, to add or remove the tag needed to enable advanced telemetry in the swf so that you can access detailed profiling information in [Monocle].
 
@@ -21,17 +21,19 @@ you can run it on the command-line or inside ant as follows
 
 add telemetry
 
-    java -jar chswf-1.0.jar -telemetry=true SWF
+    java -jar chswf-1.0.jar -telemetry=true path_to_swf_file
 
 dump tags
 
-    java -jar chswf-1.0.jar -verbose SWF
+    java -jar chswf-1.0.jar -verbose path_to_swf_file
 
 ### ANT ###
 
-you need to include the chswf jar in the ANT classpath
+_important_ you need to include the chswf jar in the ANT classpath. you can put it in "ANTHOME/lib" or provide a "-lib path_to_chsswf_jar" parameter on the command line.
 
-#### make macro ####
+#### define macro ####
+
+creating a macro you can share across projects is a good idea
 
     <macrodef name="chswf">
         <attribute name="file"/>
@@ -46,7 +48,6 @@ you need to include the chswf jar in the ANT classpath
         </sequential>
     </macrodef>
 
-#### add telemetry to swf ####
+#### use macro to add telemetry to swf ####
 
-     <chswf telemetry="true" file="swf-file"/>
-
+     <chswf telemetry="true" file="path_to_swf_file"/>
