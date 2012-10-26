@@ -51,3 +51,9 @@ creating a macro you can share across projects is a good idea
 #### use macro to add telemetry to swf ####
 
      <chswf telemetry="true" file="path_to_swf_file"/>
+
+## acknowledgements ##
+
+Code for adding telemetry tag is based on [telemetry-utils] by Adam Cath.
+
+  [telemetry-utils]: https://github.com/adamcath/telemetry-utils
